@@ -6,7 +6,7 @@
 >
 > **📝 Meta Note**: Yes, even this README was written by the AI! Talk about eating your own dog food... or should I say, compiling your own documentation? 🤖✍️
 >
-> **📖 Read the journey**: [Blog post about building this CLI with AI](#) *(coming soon)*
+> **📖 Read the journey**: [Too Lazy to Set Up My Pet Project, So I Vibe Coded a CLI to Do It. Don't Ask.](https://www.eclecticprogrammer.dev/2025/08/09/building-a-cli-tool-with-ai.html)
 
 A command-line tool to generate boilerplate Rails React GraphQL projects with modern tooling and best practices.
 
