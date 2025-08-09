@@ -1,0 +1,39 @@
+inherit_from: .rubocop.yml
+
+AllCops:
+  Include:
+    - 'app/graphql/**/*.rb'
+
+# Relax some rules for GraphQL files
+Layout/LineLength:
+  Max: 150
+
+Metrics/MethodLength:
+  Max: 30
+
+Metrics/AbcSize:
+  Max: 40
+
+Metrics/CyclomaticComplexity:
+  Max: 15
+
+Metrics/PerceivedComplexity:
+  Max: 15
+
+# GraphQL specific relaxations
+Style/ClassAndModuleChildren:
+  EnforcedStyle: nested
+
+Style/ModuleFunction:
+  Enabled: false
+
+Style/MultilineIfModifier:
+  Enabled: false
+
+Style/MultilineTernaryOperator:
+  Enabled: false
+
+# Allow longer blocks for GraphQL field definitions
+Metrics/BlockLength:
+  Exclude:
+    - 'app/graphql/**/*.rb'

@@ -1,0 +1,450 @@
+require:
+  - rubocop-rails
+  - rubocop-rspec
+  - rubocop-performance
+
+AllCops:
+  NewCops: enable
+  TargetRubyVersion: 3.2
+  Exclude:
+    - 'db/**/*'
+    - 'config/**/*'
+    - 'script/**/*'
+    - 'bin/**/*'
+    - 'vendor/**/*'
+    - 'node_modules/**/*'
+    - 'tmp/**/*'
+    - 'log/**/*'
+    - 'storage/**/*'
+    - 'public/**/*'
+    - 'coverage/**/*'
+    - 'spec/fixtures/**/*'
+
+# Layout
+Layout/LineLength:
+  Max: 120
+  Exclude:
+    - 'spec/**/*'
+
+Layout/MultilineMethodCallIndentation:
+  EnforcedStyle: indented
+
+Layout/ArrayAlignment:
+  EnforcedStyle: with_fixed_indentation
+
+Layout/HashAlignment:
+  EnforcedStyle: with_fixed_indentation
+
+# Lint
+Lint/UnusedMethodArgument:
+  AllowUnusedKeywordArguments: true
+
+Lint/UnusedBlockArgument:
+  AllowUnusedBlockArguments: true
+
+Lint/RedundantCopDisableDirective:
+  Enabled: true
+
+# Metrics
+Metrics/BlockLength:
+  Exclude:
+    - 'spec/**/*'
+    - 'config/routes.rb'
+    - 'config/application.rb'
+
+Metrics/MethodLength:
+  Max: 20
+
+Metrics/AbcSize:
+  Max: 30
+
+Metrics/CyclomaticComplexity:
+  Max: 10
+
+Metrics/PerceivedComplexity:
+  Max: 10
+
+Metrics/ClassLength:
+  Max: 150
+
+Metrics/ModuleLength:
+  Max: 150
+
+# Style
+Style/Documentation:
+  Enabled: false
+
+Style/FrozenStringLiteralComment:
+  Enabled: true
+  EnforcedStyle: always
+
+Style/StringLiterals:
+  EnforcedStyle: single_quotes
+
+Style/SymbolArray:
+  EnforcedStyle: percent
+  MinSize: 3
+
+Style/WordArray:
+  EnforcedStyle: percent
+  MinSize: 3
+
+Style/IfUnlessModifier:
+  MaxLineLength: 120
+
+Style/WhileUntilModifier:
+  MaxLineLength: 120
+
+Style/For:
+  Enabled: false
+
+Style/EachForSimpleLoop:
+  Enabled: false
+
+Style/BlockDelimiters:
+  EnforcedStyle: semantic
+
+Style/Lambda:
+  EnforcedStyle: literal
+
+Style/Proc:
+  EnforcedStyle: literal
+
+Style/RegexpLiteral:
+  EnforcedStyle: percent_r
+
+Style/PercentLiteralDelimiters:
+  PreferredDelimiters:
+    '%': '()'
+    '%i': '()'
+    '%q': '()'
+    '%Q': '()'
+    '%r': '()'
+    '%s': '()'
+    '%w': '()'
+    '%W': '()'
+    '%x': '()'
+
+Style/RedundantParentheses:
+  Enabled: false
+
+Style/RedundantReturn:
+  EnforcedStyle: multiple_return_values
+
+Style/RedundantSelf:
+  EnforcedStyle: self_only
+
+Style/RedundantBegin:
+  Enabled: false
+
+Style/RedundantCondition:
+  Enabled: false
+
+Style/RedundantConditional:
+  Enabled: false
+
+Style/RedundantRegexpEscape:
+  Enabled: true
+
+Style/RedundantSort:
+  Enabled: true
+
+Style/RedundantSortBy:
+  Enabled: true
+
+Style/RedundantStringEscape:
+  Enabled: true
+
+Style/RedundantTernary:
+  Enabled: true
+
+Style/RescueModifier:
+  Enabled: false
+
+Style/SafeNavigation:
+  Enabled: true
+
+Style/Semicolon:
+  EnforcedStyle: never
+
+Style/SignalException:
+  EnforcedStyle: semantic
+
+Style/SingleLineMethods:
+  Enabled: false
+
+Style/SpecialGlobalVars:
+  EnforcedStyle: use_english_names
+
+Style/StabbyLambdaParentheses:
+  EnforcedStyle: require_parentheses
+
+Style/StringHashKeys:
+  EnforcedStyle: string
+
+Style/StringLiteralsInInterpolation:
+  EnforcedStyle: single_quotes
+
+Style/SymbolProc:
+  EnforcedStyle: implicit
+
+Style/TernaryParentheses:
+  EnforcedStyle: require_parentheses
+
+Style/TrailingCommaInArguments:
+  EnforcedStyleForMultiline: comma
+
+Style/TrailingCommaInArrayLiteral:
+  EnforcedStyleForMultiline: comma
+
+Style/TrailingCommaInHashLiteral:
+  EnforcedStyleForMultiline: comma
+
+Style/TrailingUnderscoreVariable:
+  EnforcedStyleForMultiline: required
+
+Style/TrivialAccessors:
+  AllowPredicates: true
+  AllowDSLWriters: true
+  ExactNameMatch: true
+
+Style/VariableInterpolation:
+  Enabled: true
+
+Style/WhenThen:
+  EnforcedStyle: single_line
+
+Style/YodaCondition:
+  EnforcedStyle: forbid_for_all_comparison_operators
+
+# Rails
+Rails:
+  Enabled: true
+
+Rails/ActionFilter:
+  EnforcedStyle: action
+
+Rails/Date:
+  EnforcedStyle: strict
+
+Rails/FilePath:
+  EnforcedStyle: arguments
+
+Rails/FindBy:
+  EnforcedStyle: arguments
+
+Rails/FindEach:
+  Enabled: true
+
+Rails/HasAndBelongsToMany:
+  Enabled: false
+
+Rails/HasManyOrHasOneDependent:
+  EnforcedStyle: destroy
+
+Rails/InverseOf:
+  Enabled: false
+
+Rails/Output:
+  Exclude:
+    - 'db/seeds.rb'
+    - 'lib/tasks/**/*'
+
+Rails/PluralizationGrammar:
+  Enabled: true
+
+Rails/Presence:
+  Enabled: true
+
+Rails/Present:
+  Enabled: true
+
+Rails/RootJoinChain:
+  Enabled: true
+
+Rails/SafeNavigation:
+  Enabled: true
+
+Rails/SaveBang:
+  Enabled: true
+
+Rails/ScopeArgs:
+  Enabled: true
+
+Rails/TimeZone:
+  EnforcedStyle: strict
+
+Rails/Validation:
+  EnforcedStyle: strict
+
+# RSpec
+RSpec:
+  Enabled: true
+
+RSpec/ExampleLength:
+  Max: 20
+
+RSpec/MultipleExpectations:
+  Max: 5
+
+RSpec/NestedGroups:
+  Max: 4
+
+RSpec/DescribedClass:
+  EnforcedStyle: described_class
+
+RSpec/InstanceVariable:
+  Enabled: false
+
+RSpec/LetSetup:
+  Enabled: false
+
+RSpec/MessageSpies:
+  EnforcedStyle: receive
+
+RSpec/SubjectStub:
+  Enabled: false
+
+# Performance
+Performance:
+  Enabled: true
+
+Performance/ArraySemiInfiniteRangeSlice:
+  Enabled: true
+
+Performance/BigDecimalWithNumericArgument:
+  Enabled: true
+
+Performance/BlockGivenWithExplicitBlock:
+  Enabled: true
+
+Performance/CollectionLiteralInLoop:
+  Enabled: true
+
+Performance/ConstantRegexp:
+  Enabled: true
+
+Performance/Count:
+  Enabled: true
+
+Performance/Detect:
+  Enabled: true
+
+Performance/DoubleStartEndWith:
+  Enabled: true
+
+Performance/EndWith:
+  Enabled: true
+
+Performance/FixedSize:
+  Enabled: true
+
+Performance/FlatMap:
+  Enabled: true
+
+Performance/InefficientHashSearch:
+  Enabled: true
+
+Performance/NewArrayWithBlock:
+  Enabled: true
+
+Performance/NewArrayWithLiteralElements:
+  Enabled: true
+
+Performance/NewHashWithBlock:
+  Enabled: true
+
+Performance/NewHashWithLiteralElements:
+  Enabled: true
+
+Performance/NewObject:
+  Enabled: true
+
+Performance/NewRange:
+  Enabled: true
+
+Performance/NewString:
+  Enabled: true
+
+Performance/NewSymbol:
+  Enabled: true
+
+Performance/OpenStruct:
+  Enabled: true
+
+Performance/RangeInclude:
+  Enabled: true
+
+Performance/RedundantBlockCall:
+  Enabled: true
+
+Performance/RedundantMatch:
+  Enabled: true
+
+Performance/RedundantMerge:
+  Enabled: true
+
+Performance/RedundantSortBlock:
+  Enabled: true
+
+Performance/RedundantSplitRegexpArgument:
+  Enabled: true
+
+Performance/RedundantStringChars:
+  Enabled: true
+
+Performance/RedundantSort:
+  Enabled: true
+
+Performance/RegexpMatch:
+  Enabled: true
+
+Performance/ReverseEach:
+  Enabled: true
+
+Performance/Size:
+  Enabled: true
+
+Performance/SortReverse:
+  Enabled: true
+
+Performance/Squeeze:
+  Enabled: true
+
+Performance/StartWith:
+  Enabled: true
+
+Performance/StringIdentifierArgument:
+  Enabled: true
+
+Performance/StringReplacement:
+  Enabled: true
+
+Performance/Sum:
+  Enabled: true
+
+Performance/TimesMap:
+  Enabled: true
+
+Performance/UnfreezeString:
+  Enabled: true
+
+Performance/UriDefaultParser:
+  Enabled: true
+
+Performance/YodaCondition:
+  Enabled: true
+
+# GraphQL specific rules
+Style/ClassAndModuleChildren:
+  EnforcedStyle: nested
+
+Style/ModuleFunction:
+  Enabled: false
+
+# Custom rules for GraphQL
+Style/MultilineIfModifier:
+  Enabled: false
+
+Style/MultilineTernaryOperator:
+  Enabled: false

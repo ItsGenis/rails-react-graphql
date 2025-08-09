@@ -1,0 +1,10 @@
+--dir=.
+--ignore=db/
+--ignore=log/
+--ignore=tmp/
+--ignore=vendor/
+--ignore=node_modules/
+--ignore=coverage/
+--ignore=public/
+--ignore=storage/
+--ignore=spec/fixtures/

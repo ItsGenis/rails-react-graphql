@@ -1,0 +1,137 @@
+#!/usr/bin/env bash
+
+# Environment Setup Script for <%= appName %>
+# This script helps set up environment variables and secrets
+
+set -e
+
+echo "🔧 Setting up environment for <%= appName %>..."
+
+# Check if .env file exists
+if [ ! -f ".env" ]; then
+    echo "📝 Creating .env file from example..."
+    cp config/env.example .env
+    echo "✅ .env file created. Please edit it with your configuration."
+    echo ""
+    echo "Required environment variables:"
+    echo "  DATABASE_USERNAME=your_username"
+    echo "  DATABASE_PASSWORD=your_password"
+    echo "  JWT_SECRET_KEY=your_jwt_secret"
+    echo ""
+    echo "Optional environment variables:"
+    echo "  APP_URL=http://localhost:3000"
+    echo "  CORS_ORIGINS=http://localhost:3000,http://localhost:5173"
+    echo "  GRAPHQL_MAX_COMPLEXITY=1000"
+    echo "  GRAPHQL_MAX_DEPTH=20"
+    exit 0
+fi
+
+# Load environment variables
+source .env
+
+echo "📊 Environment Configuration:"
+echo "  App Name: <%= appName %>"
+echo "  Environment: ${RAILS_ENV:-development}"
+echo "  Database: ${DATABASE_NAME:-<%= appName %>_${RAILS_ENV:-development}}"
+echo "  JWT Expiration: ${JWT_EXPIRATION_HOURS:-24} hours"
+echo "  GraphQL Max Complexity: ${GRAPHQL_MAX_COMPLEXITY:-1000}"
+echo "  GraphQL Max Depth: ${GRAPHQL_MAX_DEPTH:-20}"
+
+# Check required environment variables
+echo ""
+echo "🔍 Checking required environment variables..."
+
+required_vars=(
+    "DATABASE_USERNAME"
+    "DATABASE_PASSWORD"
+)
+
+missing_vars=()
+
+for var in "${required_vars[@]}"; do
+    if [ -z "${!var}" ]; then
+        missing_vars+=("$var")
+    fi
+done
+
+if [ ${#missing_vars[@]} -ne 0 ]; then
+    echo "❌ Missing required environment variables:"
+    for var in "${missing_vars[@]}"; do
+        echo "  - $var"
+    done
+    echo ""
+    echo "Please add these to your .env file and run this script again."
+    exit 1
+fi
+
+echo "✅ All required environment variables are set."
+
+# Generate JWT secret if not set
+if [ -z "$JWT_SECRET_KEY" ]; then
+    echo "🔑 Generating JWT secret key..."
+    JWT_SECRET_KEY=$(openssl rand -hex 64)
+    echo "JWT_SECRET_KEY=$JWT_SECRET_KEY" >> .env
+    echo "✅ JWT secret key generated and added to .env"
+fi
+
+# Setup Rails credentials
+echo ""
+echo "🔐 Setting up Rails credentials..."
+
+# Check if credentials directory exists
+if [ ! -d "config/credentials" ]; then
+    mkdir -p config/credentials
+fi
+
+# Generate master key if it doesn't exist
+if [ ! -f "config/credentials/master.key" ]; then
+    echo "🔑 Generating Rails master key..."
+    rails credentials:edit
+    echo "✅ Rails master key generated"
+else
+    echo "✅ Rails master key already exists"
+fi
+
+# Setup environment-specific credentials
+if [ ! -f "config/credentials/${RAILS_ENV:-development}.key" ]; then
+    echo "🔑 Generating ${RAILS_ENV:-development} environment credentials..."
+    rails credentials:edit --environment=${RAILS_ENV:-development}
+    echo "✅ ${RAILS_ENV:-development} credentials generated"
+else
+    echo "✅ ${RAILS_ENV:-development} credentials already exist"
+fi
+
+# Validate configuration
+echo ""
+echo "🔍 Validating configuration..."
+
+# Test database connection
+echo "  Testing database connection..."
+if PGPASSWORD="$DATABASE_PASSWORD" psql -h "$DATABASE_HOST" -p "$DATABASE_PORT" -U "$DATABASE_USERNAME" -d postgres -c "SELECT 1;" > /dev/null 2>&1; then
+    echo "  ✅ Database connection successful"
+else
+    echo "  ❌ Database connection failed"
+    echo "  Please check your database configuration in .env"
+fi
+
+# Test JWT secret
+if [ -n "$JWT_SECRET_KEY" ]; then
+    echo "  ✅ JWT secret configured"
+else
+    echo "  ❌ JWT secret not configured"
+fi
+
+echo ""
+echo "🎉 Environment setup completed!"
+echo ""
+echo "Next steps:"
+echo "  1. Review and edit .env file if needed"
+echo "  2. Run: bundle install"
+echo "  3. Run: rails db:create db:migrate"
+echo "  4. Run: rails server"
+echo ""
+echo "Access points:"
+echo "  Rails API: http://localhost:3000"
+echo "  GraphQL: http://localhost:3000/graphql"
+echo "  GraphiQL: http://localhost:3000/graphiql"
+echo "  API Docs: http://localhost:3000/api-docs"

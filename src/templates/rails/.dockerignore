@@ -1,0 +1,199 @@
+# Docker Ignore File for <%= appName %> Rails Application
+# Excludes unnecessary files from Docker build context
+
+# Git and Version Control
+.git
+.gitignore
+.gitattributes
+.github
+.gitlab-ci.yml
+.gitlab-ci.yml.example
+
+# Documentation
+README.md
+README_*.md
+CHANGELOG.md
+LICENSE
+*.txt
+docs/
+documentation/
+
+# Development and IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Node.js and Frontend
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.npm
+.yarn-integrity
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
+
+# Rails specific
+log/
+tmp/
+*.log
+*.sqlite3
+*.sqlite3-*
+storage/
+public/assets/
+public/packs/
+public/packs-test/
+
+# Environment and Configuration
+.env
+.env.*
+!.env.example
+config/credentials/*.key
+config/credentials/*.yml.enc
+config/master.key
+
+# Database
+db/*.sqlite3
+db/*.sqlite3-*
+db/schema.rb
+db/structure.sql
+
+# Test and Coverage
+coverage/
+.coveralls.yml
+spec/examples.txt
+test/tmp/
+test/version_tmp/
+
+# Sorbet
+sorbet/rbi/gems.rbi
+sorbet/rbi/app.rbi
+sorbet/rbi/sorbet-typed/
+
+# RuboCop
+.rubocop_cache/
+.rubocop_todo.yml
+
+# Docker
+Dockerfile*
+docker-compose*.yml
+.dockerignore
+
+# CI/CD
+.github/
+.gitlab-ci.yml
+.travis.yml
+.circleci/
+Jenkinsfile
+
+# Backup and temporary files
+*.bak
+*.backup
+*.tmp
+*.temp
+*.orig
+*.rej
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.project
+.settings/
+.classpath
+
+# Build artifacts
+dist/
+build/
+*.tar.gz
+*.zip
+*.rar
+
+# Local development
+.local/
+local/
+dev/
+development/
+
+# Monitoring and logging
+*.log
+logs/
+monitoring/
+
+# Security
+*.pem
+*.key
+*.crt
+*.p12
+*.pfx
+
+# Archives
+*.tar
+*.tar.gz
+*.tar.bz2
+*.zip
+*.rar
+*.7z
+
+# Large files
+*.mp4
+*.avi
+*.mov
+*.wmv
+*.flv
+*.webm
+*.mkv
+*.iso
+*.dmg
+*.exe
+*.msi
+
+# Backup directories
+backup/
+backups/
+bak/
+old/
+archive/
+archives/
+
+# Cache directories
+.cache/
+cache/
+tmp/
+temp/
+
+# Local configuration
+config/local/
+config/environments/local*
+local_config/
+
+# Vendor and third-party
+vendor/
+third_party/
+external/
+
+# Personal files
+personal/
+private/
+secret/

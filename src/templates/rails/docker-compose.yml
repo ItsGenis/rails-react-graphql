@@ -1,0 +1,161 @@
+version: '3.8'
+
+# Docker Compose configuration for <%= appName %> Rails Application
+# This file sets up the complete development environment
+
+services:
+  # Rails Application
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: development
+    container_name: <%= appName %>-web
+    ports:
+      - '3000:3000'
+    environment:
+      - RAILS_ENV=development
+      - NODE_ENV=development
+      - APP_NAME=<%= appName %>
+      - DATABASE_HOST=postgres
+      - DATABASE_PORT=5432
+      - DATABASE_USERNAME=postgres
+      - DATABASE_PASSWORD=password
+      - DATABASE_NAME=<%= appName %>_development
+      - REDIS_URL=redis://redis:6379/0
+      - RAILS_LOG_TO_STDOUT=true
+    volumes:
+      - .:/app
+      - bundle_cache:/usr/local/bundle
+      - node_modules:/app/node_modules
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    networks:
+      - <%= appName %>-network
+    restart: unless-stopped
+    stdin_open: true
+    tty: true
+
+  # PostgreSQL Database
+  postgres:
+    image: postgres:14-alpine
+    container_name: <%= appName %>-postgres
+    environment:
+      - POSTGRES_DB=<%= appName %>_development
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=password
+    ports:
+      - '5432:5432'
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./db/init:/docker-entrypoint-initdb.d
+    networks:
+      - <%= appName %>-network
+    restart: unless-stopped
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U postgres']
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Redis Cache/Background Jobs
+  redis:
+    image: redis:7-alpine
+    container_name: <%= appName %>-redis
+    ports:
+      - '6379:6379'
+    volumes:
+      - redis_data:/data
+    networks:
+      - <%= appName %>-network
+    restart: unless-stopped
+    healthcheck:
+      test: ['CMD', 'redis-cli', 'ping']
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Sidekiq Background Jobs (optional)
+  sidekiq:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: development
+    container_name: <%= appName %>-sidekiq
+    environment:
+      - RAILS_ENV=development
+      - NODE_ENV=development
+      - DATABASE_HOST=postgres
+      - DATABASE_PORT=5432
+      - DATABASE_USERNAME=postgres
+      - DATABASE_PASSWORD=password
+      - DATABASE_NAME=<%= appName %>_development
+      - REDIS_URL=redis://redis:6379/1
+      - RAILS_LOG_TO_STDOUT=true
+    volumes:
+      - .:/app
+      - bundle_cache:/usr/local/bundle
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    networks:
+      - <%= appName %>-network
+    restart: unless-stopped
+    command: ['bundle', 'exec', 'sidekiq']
+    profiles:
+      - background
+
+  # MailHog for Email Testing (optional)
+  mailhog:
+    image: mailhog/mailhog:latest
+    container_name: <%= appName %>-mailhog
+    ports:
+      - '1025:1025' # SMTP
+      - '8025:8025' # Web UI
+    networks:
+      - <%= appName %>-network
+    restart: unless-stopped
+    profiles:
+      - email
+
+  # pgAdmin for Database Management (optional)
+  pgadmin:
+    image: dpage/pgadmin4:latest
+    container_name: <%= appName %>-pgadmin
+    environment:
+      - PGADMIN_DEFAULT_EMAIL=admin@<%= appName %>.local
+      - PGADMIN_DEFAULT_PASSWORD=admin
+    ports:
+      - '8080:80'
+    volumes:
+      - pgadmin_data:/var/lib/pgadmin
+    depends_on:
+      - postgres
+    networks:
+      - <%= appName %>-network
+    restart: unless-stopped
+    profiles:
+      - admin
+
+# Named Volumes
+volumes:
+  postgres_data:
+    driver: local
+  redis_data:
+    driver: local
+  bundle_cache:
+    driver: local
+  node_modules:
+    driver: local
+  pgadmin_data:
+    driver: local
+
+# Networks
+networks:
+  <%= appName %>-network:
+    driver: bridge

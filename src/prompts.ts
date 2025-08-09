@@ -58,7 +58,7 @@ export async function getProjectConfig(
       type: 'input',
       name: 'railsVersion',
       message: 'What Rails version would you like to use?',
-      default: options.railsVersion || '7.1.0',
+              default: options.railsVersion || '7.1',
       validate: (input: string) => {
         if (!/^\d+\.\d+\.\d+$/.test(input)) {
           return 'Please enter a valid version number (e.g., 7.1.0)';
@@ -168,7 +168,7 @@ function getDefaultConfig(
   return {
     projectName,
     projectPath: path.resolve(process.cwd(), projectName),
-    railsVersion: options.railsVersion || '7.1.0',
+    railsVersion: options.railsVersion || '7.1',
     reactVersion: options.reactVersion || '18.2.0',
     database: (options.database as 'postgresql' | 'sqlite') || 'postgresql',
     typescript: true,
@@ -190,7 +190,7 @@ function getConfigFromFlags(
   return {
     projectName,
     projectPath: path.resolve(process.cwd(), projectName),
-    railsVersion: options.railsVersion || '7.1.0',
+    railsVersion: options.railsVersion || '7.1',
     reactVersion: options.reactVersion || '18.2.0',
     database: (options.database as 'postgresql' | 'sqlite') || 'postgresql',
     typescript: options.typescript !== false,

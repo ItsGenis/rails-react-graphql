@@ -1,0 +1,179 @@
+# Docker Compose Override for Development
+# This file provides development-specific configurations
+# It will be automatically loaded by docker-compose
+
+version: '3.8'
+
+services:
+  # Rails Application Development Overrides
+  web:
+    environment:
+      # Development-specific environment variables
+      - RAILS_ENV=development
+      - NODE_ENV=development
+      - APP_NAME=<%= appName %>
+      - RAILS_LOG_LEVEL=debug
+      - RAILS_LOG_TO_STDOUT=true
+      - WEB_CONCURRENCY=1
+      - MAX_THREADS=1
+      # Database configuration
+      - DATABASE_HOST=postgres
+      - DATABASE_PORT=5432
+      - DATABASE_USERNAME=postgres
+      - DATABASE_PASSWORD=password
+      - DATABASE_NAME=<%= appName %>_development
+      # Redis configuration
+      - REDIS_URL=redis://redis:6379/0
+      - SIDEKIQ_URL=redis://redis:6379/1
+      # GraphQL configuration
+      - GRAPHQL_MAX_COMPLEXITY=1000
+      - GRAPHQL_MAX_DEPTH=20
+      # CORS configuration
+      - CORS_ORIGINS=http://localhost:3000,http://localhost:5173,http://localhost:8080
+      # JWT configuration
+      - JWT_SECRET_KEY=development_jwt_secret_key_change_in_production
+      - JWT_EXPIRATION_HOURS=24
+      # API configuration
+      - API_VERSION=v1
+      - API_RATE_LIMIT=1000
+      # External services (development)
+      - MAILER_DELIVERY_METHOD=test
+      - SMTP_HOST=mailhog
+      - SMTP_PORT=1025
+    volumes:
+      # Mount source code for live reloading
+      - .:/app
+      # Exclude node_modules and bundle to use container versions
+      - /app/node_modules
+      - /app/tmp
+      - /app/log
+      - /app/public/assets
+      - /app/public/packs
+      - bundle_cache:/usr/local/bundle
+    # Development-specific settings
+    stdin_open: true
+    tty: true
+    # Enable debugging
+    cap_add:
+      - SYS_PTRACE
+    security_opt:
+      - seccomp:unconfined
+    # Development command with debugging
+    command:
+      [
+        'sh',
+        '-c',
+        'bundle install && sleep 5 && bundle exec rails db:create db:migrate && bundle exec rails server -b 0.0.0.0 -p 3000',
+      ]
+
+  # PostgreSQL Development Overrides
+  postgres:
+    environment:
+      # Development database settings
+      - POSTGRES_DB=<%= appName %>_development
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=password
+      # Enable logging for debugging
+      - POSTGRES_INITDB_ARGS=--auth-host=scram-sha-256
+    ports:
+      - '5432:5432'
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./db/init:/docker-entrypoint-initdb.d
+    # Development health check
+    healthcheck:
+      test:
+        ['CMD-SHELL', 'pg_isready -U postgres -d <%= appName %>_development']
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+
+  # Redis Development Overrides
+  redis:
+    ports:
+      - '6379:6379'
+    volumes:
+      - redis_data:/data
+    # Development health check
+    healthcheck:
+      test: ['CMD', 'redis-cli', 'ping']
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+
+  # Sidekiq Development Overrides (if enabled)
+  sidekiq:
+    environment:
+      - RAILS_ENV=development
+      - NODE_ENV=development
+      - RAILS_LOG_LEVEL=debug
+      - RAILS_LOG_TO_STDOUT=true
+      - DATABASE_HOST=postgres
+      - DATABASE_PORT=5432
+      - DATABASE_USERNAME=postgres
+      - DATABASE_PASSWORD=password
+      - DATABASE_NAME=<%= appName %>_development
+      - REDIS_URL=redis://redis:6379/1
+    volumes:
+      - .:/app
+      - /app/node_modules
+      - /app/tmp
+      - /app/log
+      - bundle_cache:/usr/local/bundle
+    stdin_open: true
+    tty: true
+    command:
+      [
+        'bundle',
+        'exec',
+        'sidekiq',
+        '-C',
+        'config/sidekiq.yml',
+        '-e',
+        'development',
+      ]
+
+  # MailHog Development Overrides (if enabled)
+  mailhog:
+    ports:
+      - '1025:1025' # SMTP
+      - '8025:8025' # Web UI
+    environment:
+      - MH_STORAGE=maildir
+      - MH_HOSTNAME=mailhog
+    volumes:
+      - mailhog_data:/var/lib/mailhog
+
+  # pgAdmin Development Overrides (if enabled)
+  pgadmin:
+    environment:
+      - PGADMIN_DEFAULT_EMAIL=admin@<%= appName %>.local
+      - PGADMIN_DEFAULT_PASSWORD=admin
+      - PGADMIN_CONFIG_SERVER_MODE=False
+      - PGADMIN_CONFIG_MASTER_PASSWORD_REQUIRED=False
+    ports:
+      - '8080:80'
+    volumes:
+      - pgadmin_data:/var/lib/pgadmin
+
+# Development-specific volumes
+volumes:
+  postgres_data:
+    driver: local
+  redis_data:
+    driver: local
+  bundle_cache:
+    driver: local
+  node_modules:
+    driver: local
+  pgadmin_data:
+    driver: local
+  mailhog_data:
+    driver: local
+
+# Development network configuration
+networks:
+  <%= appName %>-network:
+    driver: bridge
