@@ -1,6 +1,48 @@
 # Rails React GraphQL CLI
 
+> **🤖 Built by AI**: This entire CLI tool was collaboratively developed with Claude (Anthropic's AI assistant). The project demonstrates the potential of AI-assisted software development, where human creativity and AI capabilities combine to build sophisticated developer tools.
+>
+> **⚠️ Use at Your Own Risk**: While extensively tested during development, this tool generates thousands of lines of code that haven't been individually reviewed by human eyes. Please review generated code before using in production environments.
+>
+> **📝 Meta Note**: Yes, even this README was written by the AI! Talk about eating your own dog food... or should I say, compiling your own documentation? 🤖✍️
+>
+> **📖 Read the journey**: [Blog post about building this CLI with AI](#) *(coming soon)*
+
 A command-line tool to generate boilerplate Rails React GraphQL projects with modern tooling and best practices.
+
+## 🚀 What Makes This Special
+
+This isn't just another project generator. This CLI tool was **entirely built through human-AI collaboration**, showcasing:
+
+- **🧠 AI-Driven Development**: Every line of code, from TypeScript CLI infrastructure to Docker configurations, was written with AI assistance
+- **🔄 Iterative Problem Solving**: Real-time debugging, template processing fixes, and GraphQL configuration challenges solved collaboratively
+- **📚 Comprehensive Documentation**: Auto-generated documentation and examples created during development
+- **🎯 Production Ready**: Despite being AI-built, the output includes production-grade Rails APIs, Docker setups, and modern React applications
+
+This project proves that AI can be a powerful pair-programming partner for complex software development tasks.
+
+## 🚧 Current Status
+
+**✅ COMPLETE: Rails Backend Generator (Task 2.0)**
+- Full Rails API with GraphQL server
+- Docker development environment
+- Authentication system (JWT)
+- Testing framework (RSpec)
+- API documentation (Swagger)
+- Code quality tools (RuboCop, Sorbet)
+
+**🚧 IN PROGRESS: React Frontend Generator (Task 3.0)**
+- React application with TypeScript *(coming soon)*
+- Apollo Client for GraphQL *(coming soon)*
+- Testing setup (Jest, React Testing Library) *(coming soon)*
+- Build tools (Vite) *(coming soon)*
+
+**📋 PLANNED: Additional Features (Tasks 4.0+)**
+- GitHub Actions CI/CD pipeline
+- Production deployment configurations
+- Advanced Docker optimizations
+
+> **Note**: Currently, running the CLI will generate a **fully functional Rails backend** but the React frontend is still in development. The generated project will include a `backend/` directory with everything needed to start building your Rails API!
 
 ## Features
 
